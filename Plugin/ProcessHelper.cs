@@ -274,31 +274,6 @@ public class ProcessHelper : IProcessHelper
         process.StartInfo.CreateNoWindow = true;
         process.EnableRaisingEvents = true;
 
-        if (OperatingSystem.IsWindows() && args.Variables != null && args.Variables.TryGetValue("Infinity", out var oInfinity))
-        {
-            try
-            {
-                long affinityMask = -1;
-                if (oInfinity is int iInfinity)
-                    affinityMask = iInfinity;
-                else if (oInfinity is long lInfinity)
-                    affinityMask = lInfinity;
-                else if (long.TryParse(oInfinity?.ToString() ?? "", out var parsed))
-                    affinityMask = parsed;
-
-                if (affinityMask > 0)
-                {
-                    Logger.ILog($"Using Infinity '{affinityMask}' for process");
-                    process.ProcessorAffinity = (IntPtr)affinityMask;
-                }
-            }
-            catch (Exception ex)
-            {
-                // log or ignore as needed
-                Logger.WLog($"Failed getting infinity: {ex}");
-            }
-        }
-
         if (!args.Silent)
         {
             Logger?.ILog(new string('-', 70));
@@ -339,9 +314,33 @@ public class ProcessHelper : IProcessHelper
             return result;
         }
 
-
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();
+        
+        if (OperatingSystem.IsWindows() && args.Variables != null && args.Variables.TryGetValue("Infinity", out var oInfinity))
+        {
+            try
+            {
+                long affinityMask = -1;
+                if (oInfinity is int iInfinity)
+                    affinityMask = iInfinity;
+                else if (oInfinity is long lInfinity)
+                    affinityMask = lInfinity;
+                else if (long.TryParse(oInfinity?.ToString() ?? "", out var parsed))
+                    affinityMask = parsed;
+
+                if (affinityMask > 0)
+                {
+                    Logger.ILog($"Using Infinity '{affinityMask}' for process");
+                    process.ProcessorAffinity = (IntPtr)affinityMask;
+                }
+            }
+            catch (Exception ex)
+            {
+                // log or ignore as needed
+                Logger.WLog($"Failed getting infinity: {ex}");
+            }
+        }
 
         CancellationTokenSource? timeoutCts = null;
         CancellationTokenSource linkedCts;
