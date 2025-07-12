@@ -618,6 +618,18 @@ public partial class Flow : ComponentBase, IDisposable
         {
             dict["Name"] = part.Name ?? string.Empty;
             dict["Color"] = part.Color ?? string.Empty;
+
+
+            // FF-2349: Upgrade code, remove in 6 months
+            if (part.FlowElementUid == "FileFlows.VideoNodes.FfmpegBuilderNodes.FfmpegBuilderAudioNormalization")
+            {
+                if (dict.ContainsKey("TwoPass"))
+                {
+                    bool twoPass = dict["TwoPass"]?.ToString()?.ToLowerInvariant() == "true";
+                    dict["Mode"] = twoPass ? 1 : 0;
+                    dict.Remove("TwoPass");
+                }
+            }
         }
 
         List<ListOption>? flowOptions = null;
