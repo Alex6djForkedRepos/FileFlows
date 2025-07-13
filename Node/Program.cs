@@ -33,7 +33,8 @@ public class Program
     {
         args ??= new string[] { };
         #if(DEBUG)
-        //args = new[] { "--no-gui" };
+//        args = new[] { "--no-gui" };
+        //args = new[] { "--base-dir", "/home/john/fileflows-data" };
         #endif
         if (args.Any(x => x.ToLower() == "--help" || x.ToLower() == "-?" || x.ToLower() == "/?" || x.ToLower() == "/help" || x.ToLower() == "-help"))
         {
@@ -44,6 +45,8 @@ public class Program
         ServicePointManager.DefaultConnectionLimit = 50;
 
         var options = CommandLineOptions.Parse(args);
+        DirectoryHelper.BaseDirectory = options.BaseDir;
+        
         if (Globals.IsLinux && options.InstallService)
         {
             if(options.Uninstall)

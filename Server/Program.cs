@@ -19,6 +19,7 @@ public class Program
     public static async Task Main(string[] args)
     {
 #if(DEBUG)
+        // args = new[] { "--base-dir", "/home/john/fileflows-data" };
         FixTranslations(Path.Combine("..", "Client", "wwwroot", "i18n"));
         var pluginsDir = Path.Combine("..", "..", "FileFlowsPlugins");
         if (Directory.Exists(pluginsDir))

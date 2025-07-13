@@ -24,6 +24,15 @@ class CommandLineOptions
     public string Temp { get; set; } = string.Empty;
     
     /// <summary>
+    /// Gets or sets the base directory where the application's data will be saved.
+    /// You can override the default location using the command-line parameter.
+    /// Example usage:
+    ///     --base-dir "/my/custom/data/path"
+    /// </summary>
+    [CommandLineArg("Specifies the base directory for saving application data.", "/my/custom/path", "base-dir")]
+    public string BaseDir { get; set; } = string.Empty;
+    
+    /// <summary>
     /// Gets or sets if the GUI should be shown
     /// </summary>
     [CommandLineArg("If a GUI should be shown", "true", "gui")]
