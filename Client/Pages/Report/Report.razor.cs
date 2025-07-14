@@ -380,10 +380,12 @@ public partial class Report : ComponentBase
         List<ListOption> listOptions;
         if (list is SortedDictionary<T, string> sortedList)
         {
+            Logger.Instance.ILog("Report: Sorted directory!: " + title);
             listOptions = sortedList.Select(x => new ListOption() { Label = x.Value, Value = x.Key }).ToList();
         }
         else
         {
+            Logger.Instance.ILog("Report: Not sorted directory!: " + title);
             listOptions = list.OrderBy(x => x.Value.ToLowerInvariant())
                 .Select(x => new ListOption() { Label = x.Value, Value = x.Key }).ToList();
         }
