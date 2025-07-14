@@ -169,7 +169,7 @@ public partial class Report : ComponentBase
             AddSelectField("Library",feService.Library.LibraryList, rd.LibrarySelection, ref fields, model);
             AddSelectField("Node", feService.Node.NodeList, rd.NodeSelection, ref fields, model);
             AddSelectField("Tags", feService.Tag.TagList, rd.TagSelection, ref fields, model, anyLabel: "Labels.Any", defaultToAny: true);
-            AddSelectField("Resolution", new Dictionary<string,string>()
+            AddSelectField("Resolution", new SortedDictionary<string,string>()
             {
                 { "sd", "SD"},
                 { "720p", "720p"},
@@ -374,11 +374,19 @@ public partial class Report : ComponentBase
     /// <param name="model">The model dictionary holding values for rendering in the UI.</param>
     /// <param name="anyLabel">Optional. Label for an "Any" option (if included).</param>
     /// <param name="defaultToAny">If true, sets the default selection to "Any" (null) rather than a specific value.</param>
-    private void AddSelectField<T>(string title, Dictionary<T, string> list, ReportSelection selection,
-        ref List<IFlowField> fields, IDictionary<string, object> model, string? anyLabel = null, bool defaultToAny = false) where T : notnull 
+    private void AddSelectField<T>(string title, IDictionary<T, string> list, ReportSelection selection,
+        ref List<IFlowField> fields, IDictionary<string, object> model, string? anyLabel = null, bool defaultToAny = false) where T : notnull
     {
-        var listOptions = list.OrderBy(x => x.Value.ToLowerInvariant())
-            .Select(x => new ListOption() { Label = x.Value, Value = x.Key }).ToList();
+        List<ListOption> listOptions;
+        if (list is SortedDictionary<T, string> sortedList)
+        {
+            listOptions = sortedList.Select(x => new ListOption() { Label = x.Value, Value = x.Key }).ToList();
+        }
+        else
+        {
+            listOptions = list.OrderBy(x => x.Value.ToLowerInvariant())
+                .Select(x => new ListOption() { Label = x.Value, Value = x.Key }).ToList();
+        }
 
         var label = title == "Tags" ? "Pages.Tags.Title" : null;
         
