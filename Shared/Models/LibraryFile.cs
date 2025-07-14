@@ -377,6 +377,11 @@ public class LibraryFileAdditional
     /// Gets or sets if this file has be marked for reprocessing
     /// </summary>
     public bool Reprocessing { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the optimize information
+    /// </summary>
+    public OptimizeInfo? OptimizeInfo { get; set; }
 }
 
 /// <summary>
@@ -464,4 +469,42 @@ public enum LibraryFileFlags
     /// This file should be forcible processed, disregarding any scheduling etc restrictions
     /// </summary>
     ForceProcessing = 1
+}
+
+
+    
+/// <summary>
+/// Represents the info of an optimization process.
+/// </summary>
+public class OptimizeInfo
+{
+    /// <summary>
+    /// Gets or sets a value indicating whether the optimization was forced.
+    /// </summary>
+    public bool Forced { get; set; }
+
+    /// <summary>
+    /// Gets or sets the VMAF score of the output.
+    /// </summary>
+    public float Vmaf { get; set; }
+
+    /// <summary>
+    /// Gets or sets the encoder used for optimization.
+    /// </summary>
+    public string Encoder { get; set; }
+
+    /// <summary>
+    /// Gets or sets the estimated size percentage relative to the original.
+    /// </summary>
+    public float EstimatedSizePercent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the processing time taken for the optimization.
+    /// </summary>
+    public TimeSpan Time { get; set; }
+
+    /// <summary>
+    /// Gets or sets the quality value used during optimization.
+    /// </summary>
+    public float Quality { get; set; }
 }
