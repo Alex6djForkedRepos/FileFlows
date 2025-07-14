@@ -169,13 +169,13 @@ public partial class Report : ComponentBase
             AddSelectField("Library",feService.Library.LibraryList, rd.LibrarySelection, ref fields, model);
             AddSelectField("Node", feService.Node.NodeList, rd.NodeSelection, ref fields, model);
             AddSelectField("Tags", feService.Tag.TagList, rd.TagSelection, ref fields, model, anyLabel: "Labels.Any", defaultToAny: true);
-            AddSelectField("Resolution", new SortedDictionary<string,string>()
+            AddSelectField("Resolution", new Dictionary<string,string>()
             {
                 { "sd", "SD"},
                 { "720p", "720p"},
                 { "1080p", "1080p"},
                 { "4k", "4k"},
-            }, rd.ResolutionSelection, ref fields, model);
+            }, rd.ResolutionSelection, ref fields, model, sort: false);
 
             if (rd.Direction)
             {
@@ -374,18 +374,18 @@ public partial class Report : ComponentBase
     /// <param name="model">The model dictionary holding values for rendering in the UI.</param>
     /// <param name="anyLabel">Optional. Label for an "Any" option (if included).</param>
     /// <param name="defaultToAny">If true, sets the default selection to "Any" (null) rather than a specific value.</param>
+    /// <param name="sort">if the list should be sorted or not</param>
     private void AddSelectField<T>(string title, IDictionary<T, string> list, ReportSelection selection,
-        ref List<IFlowField> fields, IDictionary<string, object> model, string? anyLabel = null, bool defaultToAny = false) where T : notnull
+        ref List<IFlowField> fields, IDictionary<string, object> model, string? anyLabel = null, bool defaultToAny = false,
+        bool sort = true) where T : notnull
     {
         List<ListOption> listOptions;
-        if (list is SortedDictionary<T, string> sortedList)
+        if (sort == false)
         {
-            Logger.Instance.ILog("Report: Sorted directory!: " + title);
-            listOptions = sortedList.Select(x => new ListOption() { Label = x.Value, Value = x.Key }).ToList();
+            listOptions = list.Select(x => new ListOption() { Label = x.Value, Value = x.Key }).ToList();
         }
         else
         {
-            Logger.Instance.ILog("Report: Not sorted directory!: " + title);
             listOptions = list.OrderBy(x => x.Value.ToLowerInvariant())
                 .Select(x => new ListOption() { Label = x.Value, Value = x.Key }).ToList();
         }
