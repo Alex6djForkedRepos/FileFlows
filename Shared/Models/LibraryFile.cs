@@ -507,4 +507,9 @@ public class OptimizeInfo
     /// Gets or sets the quality value used during optimization.
     /// </summary>
     public float Quality { get; set; }
+
+    /// <summary>
+    /// Gets or sets the resolution of the video
+    /// </summary>
+    public string Resolution { get; set; }
 }
