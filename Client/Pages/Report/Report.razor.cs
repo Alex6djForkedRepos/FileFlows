@@ -169,6 +169,13 @@ public partial class Report : ComponentBase
             AddSelectField("Library",feService.Library.LibraryList, rd.LibrarySelection, ref fields, model);
             AddSelectField("Node", feService.Node.NodeList, rd.NodeSelection, ref fields, model);
             AddSelectField("Tags", feService.Tag.TagList, rd.TagSelection, ref fields, model, anyLabel: "Labels.Any", defaultToAny: true);
+            AddSelectField("Resolution", new Dictionary<string,string>()
+            {
+                { "sd", "SD"},
+                { "720p", "720p"},
+                { "1080p", "1080p"},
+                { "4k", "4k"},
+            }, rd.NodeSelection, ref fields, model);
 
             if (rd.Direction)
             {
@@ -356,17 +363,19 @@ public partial class Report : ComponentBase
         }
         
     }
-
     /// <summary>
-    /// Adds a select field
+    /// Adds a select field to the report fields list, binding the given list of options to the model for use in a report filter UI.
     /// </summary>
-    /// <param name="title">the title of the field</param>
-    /// <param name="list">the list of options</param>
-    /// <param name="selection">the selection method</param>
-    /// <param name="fields">the fields to update</param>
-    /// <param name="model">the model to update</param>
-    private void AddSelectField(string title, Dictionary<Guid, string> list, ReportSelection selection,
-        ref List<IFlowField> fields, IDictionary<string, object> model, string? anyLabel = null, bool defaultToAny = false)
+    /// <typeparam name="T">The type of the select field's key. Must be non-nullable.</typeparam>
+    /// <param name="title">The display title for the select field.</param>
+    /// <param name="list">A dictionary of options where the key is the value to select and the value is the display label.</param>
+    /// <param name="selection">The current report selection object to bind the selected value.</param>
+    /// <param name="fields">The list of report fields to add the new select field to.</param>
+    /// <param name="model">The model dictionary holding values for rendering in the UI.</param>
+    /// <param name="anyLabel">Optional. Label for an "Any" option (if included).</param>
+    /// <param name="defaultToAny">If true, sets the default selection to "Any" (null) rather than a specific value.</param>
+    private void AddSelectField<T>(string title, Dictionary<T, string> list, ReportSelection selection,
+        ref List<IFlowField> fields, IDictionary<string, object> model, string? anyLabel = null, bool defaultToAny = false) where T : notnull 
     {
         var listOptions = list.OrderBy(x => x.Value.ToLowerInvariant())
             .Select(x => new ListOption() { Label = x.Value, Value = x.Key }).ToList();
