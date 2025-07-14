@@ -46,6 +46,11 @@ public class ReportDefinition : IUniqueObject<Guid>
     public ReportSelection TagSelection { get; set; }
     
     /// <summary>
+    /// Gets or set s if the resolution should be an option on this report
+    /// </summary>
+    public ReportSelection ResolutionSelection { get; set; }
+    
+    /// <summary>
     /// Gets or sets if the IO Direction is shown
     /// </summary>
     public bool Direction { get; set; }

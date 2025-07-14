@@ -175,7 +175,7 @@ public partial class Report : ComponentBase
                 { "720p", "720p"},
                 { "1080p", "1080p"},
                 { "4k", "4k"},
-            }, rd.NodeSelection, ref fields, model);
+            }, rd.ResolutionSelection, ref fields, model);
 
             if (rd.Direction)
             {

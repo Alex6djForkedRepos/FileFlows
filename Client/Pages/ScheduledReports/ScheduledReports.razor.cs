@@ -27,7 +27,7 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>, IDispos
     /// </summary>
     private List<ListOption> Flows, Libraries, Nodes, Tags;
 
-    private ElementField efFlows, efLibraries, efNodes, efTags, efDirection;
+    private ElementField efFlows, efLibraries, efNodes, efTags, efDirection, efResolution;
     
     private ElementField efShowLibraries = new ()
     {
@@ -53,6 +53,11 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>, IDispos
     {
         InputType = FormInputType.Hidden,
         Name = "ShowDirection"
+    };
+    private ElementField efShowResolution = new ()
+    {
+        InputType = FormInputType.Hidden,
+        Name = "ShowResolution"
     };
     
     /// <inheritdoc />
@@ -259,12 +264,14 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>, IDispos
         var showFlows = rd != null && rd.FlowSelection != ReportSelection.None;
         var showLibraries = rd != null && rd.LibrarySelection != ReportSelection.None;
         var showTags = rd != null && rd.TagSelection != ReportSelection.None;
+        var showResolution = rd != null && rd.ResolutionSelection != ReportSelection.None;
         var showDirection = rd?.Direction == true;
         fields.Add(efShowNodes);
         fields.Add(efShowLibraries);
         fields.Add(efShowFlows);
         fields.Add(efShowTags);
         fields.Add(efShowDirection);
+        fields.Add(efShowResolution);
         
         
         efDirection = new ElementField()
@@ -355,6 +362,31 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>, IDispos
             }
         };
         fields.Add(efTags);
+        efResolution = new ElementField()
+        {
+            Name = nameof(item.Tags),
+            Label = "Labels.Resolution",
+            InputType = FormInputType.MultiSelect,
+            Parameters = new()
+            {
+                {
+                    nameof(InputMultiSelect.Options), new List<ListOption>()
+                    {
+                        new() { Value = "sd", Label = "SD" },
+                        new() { Value = "720p", Label = "720p" },
+                        new() { Value = "1080p", Label = "1080p" },
+                        new() { Value = "4k", Label = "4k" },
+                    }
+                },
+                { nameof(InputMultiSelect.AnyOrAll), true },
+                { "LabelAny", Translater.Instant("Labels.Any") }
+            },
+            Conditions = new List<Condition>()
+            {
+                new(efShowResolution, showResolution, value: true)
+            }
+        };
+        fields.Add(efTags);
         return (fields, new
         {
             item.Uid,
@@ -375,6 +407,7 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>, IDispos
             ShowLibraries = showLibraries,
             ShowTags = showTags,
             ShowDirection = showDirection,
+            ShowResolution = showResolution
         });
     }
 
