@@ -44,7 +44,7 @@ public partial class InputMultiSelect: Input<List<object>>
     {
         base.OnInitialized();
         lblAll = Translater.Instant("Labels.All");
-        lblAny =LabelAny?.EmptyAsNull() ??  Translater.Instant("Labels.Any");
+        lblAny = LabelAny?.EmptyAsNull() ??  Translater.Instant("Labels.Any");
         if (Value == null)
             Value = new List<object>();
         else if(Options != null)

@@ -320,6 +320,14 @@ public partial class Report : ComponentBase
             object? oEmail = null;
             dict?.TryGetValue("Email", out oEmail);
             bool emailing = string.IsNullOrWhiteSpace(oEmail?.ToString()) == false;
+
+            if (dict.TryGetValue("Node", out object? nodeValue) && nodeValue is List<object> nodes && nodes.Count == feService.Node.NodeList.Count)
+                dict.Remove("Node");
+            if (dict.TryGetValue("Library", out object? libraryValue) && libraryValue is List<object> libraries && libraries.Count == feService.Library.LibraryList.Count)
+                dict.Remove("Library");
+            if (dict.TryGetValue("Flow", out object? flowValue) && flowValue is List<object> flows && flows.Count == feService.Flow.FlowList.Count)
+                dict.Remove("Flow");
+            
             var result = await HttpHelper.Post<string>($"/api/report/generate/{Uid}", Model);
             if (result.Success == false)
             {
