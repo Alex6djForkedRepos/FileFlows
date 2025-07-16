@@ -130,10 +130,16 @@ public partial class NavBar
                     // flow editor
                     Active = MenuItems.FirstOrDefault(x => x.Url.Contains("flows"));
                 }
-                
-                if (NavigationManager.Uri.Contains("config/"))
+                else if (NavigationManager.Uri.Contains("report/"))
+                {
+                    // report
+                    Active = MenuItems.FirstOrDefault(x => x.Url.Contains("report"));
+                }
+                else if (NavigationManager.Uri.Contains("config/"))
+                {
                     Active = BottomNavBarItems.FirstOrDefault(x => x.Url.Contains("config/"));
-                
+                }
+
                 Active ??= MenuItems.First();
             }
         }
