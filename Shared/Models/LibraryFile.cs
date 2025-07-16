@@ -512,9 +512,9 @@ public class OptimizeInfo
     /// Gets or sets the resolution of the video
     /// </summary>
     public string Resolution { get; set; }
-    
+        
     /// <summary>
-    /// Gets or sets the number of iterations it took to determine the quality
+    /// Gets or sets the number of evaluated quality  levels were executed
     /// </summary>
-    public int Iterations { get; set; }
+    public int Evaluations { get; set; }
 }
