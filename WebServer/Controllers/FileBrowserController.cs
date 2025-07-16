@@ -98,8 +98,8 @@ public class FileBrowserController : Controller
     {
         if (Globals.IsDocker)
         {
-            var envPath = Environment.GetEnvironmentVariable("BROWSER_START_PATH");
-            if (!string.IsNullOrWhiteSpace(envPath))
+            var envPath = Environment.GetEnvironmentVariable("BROWSER_START_DIR");
+            if (!string.IsNullOrWhiteSpace(envPath) && Directory.Exists(envPath))
                 return envPath;
 
             if (Directory.Exists("/media"))
