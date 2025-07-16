@@ -96,8 +96,16 @@ public class FileBrowserController : Controller
     /// <returns>the start directory</returns>
     private string GetStartDirectory()
     {
-        if (Globals.IsDocker && Directory.Exists("/media"))
-            return "/media";
+        if (Globals.IsDocker)
+        {
+            var envPath = Environment.GetEnvironmentVariable("BROWSER_START_PATH");
+            if (!string.IsNullOrWhiteSpace(envPath))
+                return envPath;
+
+            if (Directory.Exists("/media"))
+                return "/media";
+        }
+
         return DirectoryHelper.GetUsersHomeDirectory();
     }
 }
